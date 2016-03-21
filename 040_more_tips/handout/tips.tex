@@ -1,0 +1,248 @@
+\setModuleTitle{More Tips And Tricks}
+\setModuleAuthors{%
+  Stephen Bent, Robinson Research Institute, University of Adelaide\\
+  Steve Pederson, Bioinformatics Hub, University of Adelaide \mailto{stephen.pederson@adelaide.edu.au}\\
+}
+\setModuleContributions{%
+  Dan Kortschak, Adelson Research Group, University of Adelaide \mailto{dan.kortschak@adelaide.edu.au} \\
+}
+
+%----------------------------------------------------------------------------------------
+% MODULE TITLE PAGE
+%----------------------------------------------------------------------------------------
+% BEGIN: Module Title Page
+%  * The chapter page will always appear on odd numbered page
+\chapter{\moduleTitle}
+\newpage
+
+\section{Text In the Terminal}
+We can display a line of text in \texttt{stdout} by using the command \texttt{echo}.
+The most simple function that people learn to write in most languages is called \texttt{Hello World} and we'll do the same thing today.
+\begin{steps}
+\begin{lstlisting}
+echo 'Hello World'
+\end{lstlisting}
+\end{steps}
+That's pretty amazing isn't it \& you can make the terminal window say anything you want without meaning it.\\
+\begin{lstlisting}
+echo 'This computer will self destruct in 10 seconds!'
+\end{lstlisting}
+
+\begin{information}
+There are a few subtleties about text which are worth noting.
+Inspect the \texttt{man echo} page \& note the effects of the \texttt{-e} option.
+This allows you to specify tabs, new lines \& other special characters by using the backslash to signify these characters.
+This is an important concept \& the use of a backslash to ``escape'' normal meaning of a character is very common.
+Try the following three commands \& see what effects these special characters have.
+\end{information}
+\begin{steps}
+\begin{lstlisting}
+echo 'Hello\tWorld'
+echo -e 'Hello\tWorld'
+echo -e 'Hello\nWorld'
+\end{lstlisting}
+\end{steps}
+
+%\begin{steps}
+%We can also evaluate numerical expressions in the terminal window using the echo command, with the numerical expression prefaced by the dollar sign \& the expression enclosed in double brackets. \\
+%\begin{lstlisting}
+%echo $((1+2))
+%\end{lstlisting}
+%The standard arithmetic processes like addition, subtraction, division \& multiplication will work as expected, but most programmers don't really use this functionality terribly much.
+%\end{steps}
+
+\section{Redirection Using The Pipe Symbol}
+\begin{information}
+A very common process in the command line is to take the output of one process and send it to another.
+For example, we might want to cut a column from a csv file with categorical information, and then send that field to have the different categories counted by another tool.
+This is where the concept of \texttt{stdout} becomes more important. \\
+\end{information}
+
+\begin{steps}
+By default, most command-line tools print their output to \texttt{stdout} but instead, we can send this to another tool using the pipe (|) symbol.
+This is exactly like putting a pipe on the output of one process, and routing it to the \textit{standard input} or \texttt{stdin} of another.
+We can use this to build up a series or chain of processes in a single line.
+A trivial example might be match a word segment.
+\begin{lstlisting}
+echo -e 'Hello\nWorld' | egrep 'Hell'
+\end{lstlisting}
+\end{steps}
+
+\begin{information}
+Note that we didn't give a file to egrep to work with in the above command.
+It took the \texttt{stdout} from the command \texttt{echo} as it's input via \texttt{stdin}.
+This is how the pipe will work on virtually all occasions.
+\end{information}
+
+\begin{steps}
+As another simple example, we could take some long output from the \texttt{ls} command \& send it to the pager \texttt{less}.
+\begin{lstlisting}
+ls -lh /usr/bin | less
+\end{lstlisting}
+Page through the output until you get bored, then hit \texttt{q} to quit.
+\end{steps}
+
+\section{Sending Output To A File}
+\begin{information}
+So far, the only output we have seen has been in the terminal, i.e  \texttt{stdout}.
+Similar to the pipe command, we can redirect the output of a command \textbf{to a file} instead of to standard output, and we do this using the greater than symbol (\textgreater), which we can almost envisage as an arrow.
+\end{information}
+
+\begin{steps}
+To see this in action, we'll collect a list of the sequence identifiers in our set of RAD-seq reads \& write these to a file, we could use the command as above, but instead of directing the output to the terminal, we could write this to a file.
+\end{steps}
+\begin{lstlisting}
+cd ~/firstname
+grep -E '^@.+_1' myReads1.fq > SeqIDs.txt
+less SeqIDs.txt
+\end{lstlisting}
+
+Once you've had a quick look at the file, exit the less pager and delete the file using the \texttt{rm} command.
+\begin{lstlisting}
+rm SeqIDs.txt
+\end{lstlisting}
+
+\section{Downloading Data}
+
+\begin{steps}
+The terminal makes obtaining data from any publicly available sources very easy using the command \texttt{wget}, once you know the location of a file.
+Let's find a genome to download by opening Firefox \& heading to \texttt{ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/}.
+Here we can see a list of all the Bacteria which have genome information available.
+Open one of the folders to have a look at the contents, or if you'd like scroll down to everyone's favourite probiotic \texttt{Lactobacillus\_acidophilus\_30SC\_uid63605}.
+We'll download the \textit{General Feature Format} file with the suffix \texttt{.gff} file which contains information about any identified genomic features.
+If you've chosen Lactobacillus, we'll download the file NC\_015214.gff.
+Right-click on the file \& select \textit{Copy Link Location}.
+If you're not already in your personal directory, i.e. \texttt{\~{}/firstname} then change into this directory and type the command \texttt{wget}.
+Once you've typed this command, right-click and paste the contents of the clipboard to give the following (apologies for the small font):
+\end{steps}
+
+\begin{lstlisting}[basicstyle=\tiny]
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Lactobacillus_acidophilus_30SC_uid63605/NC_015214.gff
+\end{lstlisting}
+
+This will download the selected file into your current working directory.
+Don't forget to have a look at the \texttt{man} page to make sure you understand how the command works.
+
+\begin{steps}
+The first 5 lines of this file is what we refer to as a \textit{header}, which contains important information about how the file was generated in a standardised format.
+Many file formats have these structures at the beginning but for our purposes today we don't need to use any of this information so we can move on.
+Have a look at the beginning of the file to see what it looks like.
+\end{steps}
+\begin{lstlisting}
+head NC_015214.gff
+\end{lstlisting}
+
+Notice the header lines begin with one or two hash symbols, and the remainder of the file contains information about the genomic features.
+The first feature is annotated as a \textit{region} in the third field, whilst the second feature is annotated as a \textit{gene}.
+
+\begin{questions}
+How many features are contained in this file?\\
+\begin{answer}
+\texttt{wc -l NC\_015214.gff} \\
+This will give 4355, but the first 5 lines are header lines.
+To count the non-header lines you could try several things:\\
+\texttt{grep -vc `\^{}\#' NC\_015214.gff} \\
+or\\
+\texttt{grep -c `\^{}[\^{}\#]' NC\_015214.gff} \\
+\end{answer}
+
+\end{questions}
+
+\begin{bonus}
+As mentioned above, this file contains multiple features such as \textit{regions}, \textit{genes}, \textit{CDSs}, \textit{exons} or \textit{tRNAs}.
+If we wanted to find how many regions are annotated in this file we could use the processes we've learned above: \\
+\texttt{grep -c `region' NC\_015214.gff} \\
+
+If we wanted to count how many genes are annotated, the first idea we might have would be to do something similar using a search for the pattern \texttt{`gene'}. \\
+\begin{questions}
+Do you think this is the number of genes?
+Try searching for the number of coding DNA sequences using the same approach (i.e. CDS) \& then add the two numbers?
+Is this more than the total number of features we found earlier?
+Can you think of a way around this using regular expressions?
+\begin{answer}
+Note that some of the occurrences of the word \textit{gene} appears in many lines which are not genes.
+We need to restrict the search to one of the tab-separated fields by including a white-space character in the search.
+The command:\\
+\texttt{grep -En `\textbackslash sgene\textbackslash s' NC\_015214.gff | wc -l} \\
+will give a much different result as now we are searching for the word gene surrounded by white-space.
+\end{answer}
+
+Alternatively, there is a command \texttt{cut} available.
+Call the manual page (\texttt{man cut}) and inspect the option \texttt{-f}.
+The information about the types of features annotated is in the third field.
+Try to think of a way of searching this field alone.
+\begin{answer}
+\texttt{cut -f3 NC\_015214.gff | grep -c `gene'}
+Or even more accurately
+\texttt{egrep -v '\^{}\#' NC\_015214.gff | cut -f3 | egrep -c `gene'}
+although it gives the same results in this instance
+\end{answer}
+
+A similar question to a few pages back would be how many \textit{types} of features are in this file?
+The commands \texttt{cut}, along with \texttt{sort} and \texttt{uniq} may prove to be useful when answering this
+\begin{answer}
+\texttt{egrep -v '\^{}\#' NC\_015214.gff | cut -f3 | sort | uniq | wc -l}
+\end{answer}
+
+\end{questions}
+\end{bonus}
+
+\section{Working With Compressed Files}
+
+\begin{information}
+The file we have downloaded using \texttt{wget} was in simple text format.
+The suffix \texttt{.gff} really just denoted a specific structure within the text file so that we know where to look within the file for certain information.
+Most software that uses a file in this format will manually check for the correct structure first.
+However, when working in the bioinformatics field,  you will often see or require compressed files .
+This is a common enough concept for even Windows and MAC users, but a few specific compression types are commonly used in bioinformatics.
+The man differences are in the compression algorithms used, and that is beyond the scope of what most of us need to worry about.
+\end{information}
+
+The most common types of compression you will see are:\\
+\begin{center}
+	\begin{tabular}{ p{2cm}  p{3cm}  p{3cm}   p{4cm}}
+		\toprule
+		\textbf{Suffix} & \textbf{Compress} & \textbf{Extract} & \textbf{Useful Arguments} \\
+		\midrule
+		\texttt{.zip} & \texttt{zip} & \texttt{unzip} & \texttt{-d, -c, -f} \\
+		\midrule
+		\texttt{.gz} & \texttt{gzip} & \texttt{gunzip} & \texttt{-d, -c, -f} \\
+								 &								& \texttt{zcat} & \\
+		\midrule
+		\texttt{.tar.gz} & \texttt{tar} & \texttt{tar} & \texttt{-x, -v, -f, -z} \\
+		\midrule
+		\texttt{.bz2} & \texttt{bzip2} & \texttt{bunzip2} & \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+Often, files you download this way will be compressed (tar: tape archive) and archived (zipped). 
+If you see file name suffixes like .tar, .zip, .gz, and/or .bz2, among others, that is what these are.  
+To explore what these command-line options do, please check the \texttt{man} pages. \\
+
+\begin{steps}
+Just to demonstrate how we do this on the command line, we could compress one of our fastq files
+\begin{lstlisting}
+cd ~/firstname
+gzip myReads1.fq
+\end{lstlisting}
+\end{steps}
+
+\begin{questions}
+How would we now decompress (or extract) this file?\\
+\begin{answer}
+\texttt{gunzip  myReads1.fq.gz}\\
+\end{answer}
+
+How could we have kept our compressed file, along with the decompressed output?\\
+\begin{answer}
+\texttt{gunzip -k myReads1.fq.gz}\\
+\end{answer}
+
+Why would we use \texttt{zcat} instead of \texttt{gunzip -c}?\\
+\begin{answer}
+We need less typing, and it's easier to read back
+\end{answer}
+\end{questions}
+
+

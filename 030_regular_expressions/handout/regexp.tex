@@ -1,0 +1,197 @@
+\setModuleTitle{Regular Expressions}
+\setModuleAuthors{%
+  Stephen Bent, Robinson Research Institute, University of Adelaide\\
+  Steve Pederson, Bioinformatics Hub, University of Adelaide \mailto{stephen.pederson@adelaide.edu.au}\\
+}
+\setModuleContributions{%
+  Dan Kortschak, Adelson Research Group, University of Adelaide \mailto{dan.kortschak@adelaide.edu.au} \\
+}
+
+%----------------------------------------------------------------------------------------
+% MODULE TITLE PAGE
+%----------------------------------------------------------------------------------------
+% BEGIN: Module Title Page
+%  * The chapter page will always appear on odd numbered page
+\chapter{\moduleTitle}
+\newpage
+
+\section{Introduction}
+Regular expressions are a powerful \& flexible way of searching for text strings amongst a large document or file.
+Most of us are familiar with searching for a word within a file, but regular expressions allow us to search for these with more flexibility, particularly in the context of genomics.
+Instead of searching strictly for a word or text string, we can search using less strict matching criteria.
+For example, we could search for a sequence that is either \texttt{AGT} or \texttt{ACT} by using the patterns  \texttt{A[GC]T} or  \texttt{A(G|C)T}.
+These two patterns will search for an  \texttt{A}, followed by either a  \texttt{G} or  \texttt{C}, then followed strictly by a  \texttt{T}.
+Similarly a match to \texttt{ANNT} can be found by using the patterns \texttt{A[AGCT][AGCT]T} or  \texttt{A[AGCT]\{2\}T}. \\
+
+Whilst the bash shell has a great capacity for searching a file to matches to regular expressions, this is where languages like \textit{perl} and \textit{python} offer a great degree more power.
+The commands \texttt{awk} \& \texttt{sed} which we will look at later today also use regular expressions to great effect.
+
+\section{The command \texttt{grep}}
+The built-in command which searches using regular expressions in the terminal is \texttt{grep}.
+This function searches a file or input on a line-by-line basis, making patterns split across lines more difficult to find, which is one place that a programming language like Python or Perl would become preferable..  
+The \texttt{man grep} page contains more detail on regular expressions under the \texttt{REGULAR EXPRESSIONS} header (scroll down a few pages).  
+As can be seen in the \texttt{man} page, the command follows the form
+\begin{lstlisting}
+grep [OPTIONS] 'pattern' filename
+\end{lstlisting}
+The option \texttt{-E} is preferable as it it stand for Extended, which we can think of as ``Easier''.
+As well as the series of conventional numbers and characters that we are familiar with, we can match to characters with special meaning, as we saw above where enclosing the two letters in brackets gave the option of matching either. 
+The \texttt{-E} option opens up the full set of wild-card characters, and can also be called simply by using \texttt{egrep} instead of \texttt{grep -E}.\\
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|p{4cm} | p{11.cm} |}
+\hline
+Special Character & Meaning \\ \hline
+\textbackslash w & match any letter or digit, i.e. a word character \\
+\textbackslash s & match any white space character, includes spaces,
+tabs \& end-of-line marks \\
+\textbackslash d & match any digit from 0 to 9 \\
+. & matches any single character \\
++ & matches one or more of the preceding character (or pattern) \\
+\** & matches zero or more of the preceding character (or pattern) \\
+? & matches zero or one of the preceding character (or pattern) \\
+\{x\} or \{x,y\} & matches x or between x and y instances of the preceding
+character \\
+\^{} & matches the beginning of a line (when not inside square brackets) \\
+\$ & matches the end of a line \\
+() & contents of the parentheses treated as a single pattern \\
+{[}] & matches any one of the characters inside the brackets \\
+{[}\^{}] & matches anything other than any of the characters in the brackets \\
+| & either the string before or the string after the "pipe" (use
+parentheses) \\
+\textbackslash & don't treat the following character in the way you normally would. This is why the first three entries in this table started with a backslash, as this gives them their ``special'' properties, whereas placing a backslash before a `.' symbol will enable it to function as an actual dot/full-stop. \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Pattern Searching}
+In this section we'll learn the basics of using the \texttt{grep} command \& what forms the output can take.
+In your \texttt{\~{}/Documents/trainingData} directory you can find the file \texttt{words}.
+This is simply a text file with a different word on every line. \\
+
+\begin{steps}
+Change into this directory \& page through the first few lines of the file to get an idea about what it contains. 
+\textbf{Make sure you're in the correct directory} or else \texttt{grep} won't be able to find the file \texttt{words}. \\
+
+Now let's try a few searches to get a feel for the basic syntax of the command.
+Using the previous table of special characters, try to describe what you're searching for on your notes \textbf{BEFORE} you enter the command.
+Do the results correspond with what you expected to see?
+
+\begin{lstlisting}
+grep -E 'fr..ol' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E 'fr.[jsm]ol' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E 'fr.[^jsm]ol' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E 'fr..ol$' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E 'fr.+ol$' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E 'cat|dog' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -E '^w.+(cat|dog)' words
+\end{lstlisting}
+\end{steps}
+
+\begin{steps}
+In the above, we were changing the pattern to extract different results from the files.
+Now we'll try a few different options to change the output, whilst leaving the pattern unchanged.
+If you're unsure about some of the options, don't forget to consult the \texttt{man} page. \\
+\begin{lstlisting}
+grep -E 'louse' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -Ew 'louse' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -Ewn 'louse' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -EwC2 'louse' words
+\end{lstlisting}
+\begin{lstlisting}
+grep -c 'louse' words
+\end{lstlisting}
+\end{steps}
+
+\section{Pattern Matching in DNA sequences}
+Now we can have a look through the RAD-Seq file that we moved \& renamed earlier.
+Before we search the the file \texttt{myReads1.fq}, we should know what we this data actually is.
+These are a small subset of 100bp reads from a RAD-Seq experiment \& are from the first sample in a set of paired reads.
+Although we can't tell this directly from this file, the sequences were obtained from a rabbit affected by \textit{calicivirus}.
+\begin{steps}
+Change into the directory we created earlier using your name.
+\begin{lstlisting}
+cd ~/firstname
+\end{lstlisting}
+\end{steps}
+
+\begin{steps}
+If you inspect the data using the \texttt{head} command, you'll notice that the file is in sets of four lines, as defined by the fastq format.
+\begin{lstlisting}
+head myReads1.fq
+\end{lstlisting}
+The first line contains a \textit{sequence identifier}, the second line is the \textit{sequence} itself, the third line is simply the `+' symbol as a placeholder \& the final line is a set of characters which correspond to \textit{quality scores} for each base.
+\end{steps}
+
+\begin{questions}
+As these reads are from the first sample in a set of paired reads, the final value in the sequence identifier is \texttt{\_1}.
+How could we search for a pattern just to extract the sequence identifiers? \\
+\begin{answer}
+\texttt{grep -E `\^{}@.+\_1\$' myReads1.fq}
+\end{answer}
+
+How could we check for any sequences which may accidentally be included from the second sample in the pair of reads?
+Hint: These identifiers would finish with \texttt{\_2} \\
+\begin{answer}
+I'm hoping they will try to search for the incorrect string \\
+\texttt{grep -E `\^{}@.+\_2' myReads1.fq}.\\
+The correct command should be: \\
+\texttt{grep -E `\^{}@.+\_2\$' myReads1.fq} \\
+which should give no results. \\
+\end{answer}
+
+\end{questions}
+
+\begin{steps}
+Now we'll try searching for some sequences, so try the following search string. 
+Does the output match what you expected? \\
+\texttt{grep -En `TGCAGGCTCT' myReads1.fq}
+\end{steps}
+
+This should give lines 774, 3382, 3758, 7326, 7594 \& 9566 along with the sequence information and matching fragment highlighted in red.\\
+
+\begin{questions}
+For the following search string \\
+\texttt{grep -En `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq} \\
+What do the following components of the pattern match to: \\
+\texttt{`.+'} \\
+\begin{answer}
+This matches an unspecified length of any character, until the next key match is found. \\
+\end{answer}
+
+\texttt{(GA)\{2\}} \\
+\begin{answer}
+This matches to two repeats of the pattern GA. \\
+\end{answer}
+
+\texttt{A\{3\}}\\
+\begin{answer}
+This matches three `A's in a row. \\
+\end{answer}
+
+How could you find the sequence identifier for the above match?\\
+\begin{answer}
+\texttt{grep -EnC1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq} or \\
+\texttt{grep -EnB1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq}
+\end{answer}
+\end{questions}
+

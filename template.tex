@@ -11,14 +11,22 @@
 %  center                % actual page is centered on the galley
 %]{crop}
 % Set some Workshop specific info
-\setWorkshopTitle{Some Workshop}
-\setWorkshopVenue{Some Venue}
-\setWorkshopDate{A Date}
-\setWorkshopAuthor{
-Workshop Author 1\\
-Workshop Author 2\\
-}
 
+%\usepackage{underscore}
+
+\usepackage{color}
+\definecolor{light-blue}{rgb}{0.8,0.85,1}
+
+
+\setWorkshopTitle{Introduction to Command-Line \\[5mm]
+					\& Scripting For Bioinformatics}
+\setWorkshopVenue{University of Adelaide}
+\setWorkshopDate{24th March, 2016}
+\setWorkshopAuthor{
+Steve Pederson\\
+Stephen Bent\\
+Dan Kortschak\\
+}
 \begin{document}
 
 %
@@ -47,12 +55,17 @@ Workshop Author 2\\
 %
 \input{015_preamble/preamble.tex}
 
+\clearpage
+\input{016_computer_setup/setup.tex}
+
 %
 % Start of modules
 % Switch chapter styling to module
 %
 \chapterstyle{module}
 
+%\clearpage
+%\chapter{The Command Line}
 
 %
 % End of modules
