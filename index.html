@@ -1,49 +1,118 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Intro-bash 2016 03 24 : ">
+    <title>University of Adelaide, Bioinformatics Hub Training Handouts</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Intro-bash 2016 03 24</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1>Bioinformatics Training Handouts</h1>
+        <p>A Workshop developed by the University of Adelaide, Bioinformatics Hub.
+        This workshop also utilises the templates designed and provided by Bioplatforms Australia (BPA), CSIRO Bioinformatics Core and the EBI.</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/UofABioinformaticsHub/Intro-Bash_2016_03_24">View on GitHub</a>
+        <p class="view"><a href="https://github.com/UofABioinformaticsHub/Intro-Bash_2016_03_24">View the Project on GitHub <small>UofABioinformaticsHub/Intro-Bash_2016_03_24</small></a></p>
 
-          <h1 id="project_title">Intro-bash 2016 03 24</h1>
-          <h2 id="project_tagline"></h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/UofABioinformaticsHub/Intro-Bash_2016_03_24/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/UofABioinformaticsHub/Intro-Bash_2016_03_24/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+        <ul>
+          <li><a href="pdfs-latest/trainee_handout.pdf">Download <strong>Trainee PDF</strong></a></li>
+          <li><a href="pdfs-latest/trainer_handout.pdf">Download <strong>Trainer PDF</strong></a></li>
+          <li><a href="https://github.com/UofABioinformaticsHub/Intro-Bash_2016_03_24">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://travis-ci.org/UofABioinformaticsHub/Intro-Bash_2016_03_24"><img src="https://travis-ci.org/UofABioinformaticsHub/Intro-Bash_2016_03_24.png?branch=master" alt="Build Status"></a></p>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>This is the public page for Intro-Bash-24_03_2016</p>
+<h1>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of Contents</h1>
+
+
+
+<ul>
+<li><a href="#homepage-and-pdfs">Homepage and PDFs</a></li>
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#building-pdfs-from-latex-source">Building PDFs from LaTeX Source</a></li>
+<li><a href="#credits">Credits</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+
+
+
+<h1>
+<a id="homepage-and-pdfs" class="anchor" href="#homepage-and-pdfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Homepage and PDFs</h1>
+
+<p>You can access the homepage, and up-to-date PDFs, for this project at
+<a href="http://uofabioinformaticshub.github.io/Intro-Bash_2016_03_24">http://uofabioinformaticshub.github.io/Intro-Bash_2016_03_24</a></p>
+
+<h1>
+<a id="purpose" class="anchor" href="#purpose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Purpose</h1>
+
+<p>This repository contains style information for use with LaTeX to generate
+consistently styled handout documents for use in hands-on bioinformatics
+training workshops.</p>
+
+<p>You can find full details of the templates used to build this repository at:
+<a href="http://BPA-CSIRO-Workshops.github.io/handout-template/">http://BPA-CSIRO-Workshops.github.io/handout-template/</a></p>
+
+<h1>
+<a id="building-pdfs-from-latex-source" class="anchor" href="#building-pdfs-from-latex-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building PDFs from LaTeX Source</h1>
+
+<p>First you need to install texlive and a bunch of LaTeX packages. To make this
+easy we have provided a script to do this:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">cd</span> developers
+sudo ./texlive_install.sh
+<span class="pl-c1">cd</span> ../</pre></div>
+
+<p>Secondly, you need to add the location of the texlive binary's to your PATH. If
+you installed texlive using the supplied script, the following should work:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">export</span> PATH=/usr/local/texlive/2013/bin/x86_64-linux:<span class="pl-smi">$PATH</span></pre></div>
+
+<p>Now you're ready to build the PDFs using the supplied Makefile:</p>
+
+<div class="highlight highlight-source-shell"><pre>make</pre></div>
+
+<h1>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h1>
+
+<p>This style was originally designed for the Next Generation Sequencing (NGS)
+hands-on workshop developed by Bioplatforms Australia (BPA), CSIRO
+Bioinformatics Core and the EBI. It was written predominantly by Nathan S.
+Watson-Haigh.</p>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>The contents of this repository are released under the Creative Commons
+Attribution 3.0 Unported License. For a summary of what this means,
+please see:
+<a href="http://creativecommons.org/licenses/by/3.0/deed.en_GB">http://creativecommons.org/licenses/by/3.0/deed.en_GB</a></p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Intro-bash 2016 03 24 maintained by <a href="https://github.com/UofABioinformaticsHub">UofABioinformaticsHub</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/UofABioinformaticsHub">University of Adelaide, Bioinformatics Hub</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-
-    
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-68148892-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
 
   </body>
 </html>
