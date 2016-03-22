@@ -43,14 +43,6 @@ echo -e 'Hello\nWorld'
 \end{lstlisting}
 \end{steps}
 
-%\begin{steps}
-%We can also evaluate numerical expressions in the terminal window using the echo command, with the numerical expression prefaced by the dollar sign \& the expression enclosed in double brackets. \\
-%\begin{lstlisting}
-%echo $((1+2))
-%\end{lstlisting}
-%The standard arithmetic processes like addition, subtraction, division \& multiplication will work as expected, but most programmers don't really use this functionality terribly much.
-%\end{steps}
-
 \section{Redirection Using The Pipe Symbol}
 \begin{information}
 A very common process in the command line is to take the output of one process and send it to another.
@@ -69,7 +61,7 @@ echo -e 'Hello\nWorld' | egrep 'Hell'
 \end{steps}
 
 \begin{information}
-Note that we didn't give a file to egrep to work with in the above command.
+\textbf{Note that we didn't give a file to egrep to work with in the above command.}
 It took the \texttt{stdout} from the command \texttt{echo} as it's input via \texttt{stdin}.
 This is how the pipe will work on virtually all occasions.
 \end{information}
@@ -85,17 +77,24 @@ Page through the output until you get bored, then hit \texttt{q} to quit.
 \section{Sending Output To A File}
 \begin{information}
 So far, the only output we have seen has been in the terminal, i.e  \texttt{stdout}.
-Similar to the pipe command, we can redirect the output of a command \textbf{to a file} instead of to standard output, and we do this using the greater than symbol (\textgreater), which we can almost envisage as an arrow.
+Similar to the pipe command, we can redirect the output of a command \textbf{to a file} instead of to standard output, and we do this using the greater than symbol (\textgreater), which we can almost envisage as an arrow.\\
+
 \end{information}
 
 \begin{steps}
 To see this in action, we'll collect a list of the sequence identifiers in our set of RAD-seq reads \& write these to a file, we could use the command as above, but instead of directing the output to the terminal, we could write this to a file.
 \end{steps}
 \begin{lstlisting}
-cd ~/firstname
-grep -E '^@.+_1' myReads1.fq > SeqIDs.txt
+cd ~/Documents/trainingData
+grep -E '^@.+_1' pair1.fq > SeqIDs.txt
 less SeqIDs.txt
 \end{lstlisting}
+
+\begin{information}
+This is similar to the $>>$ trick we used earlier, but using only a single $>$ symbol will directly overwrite any existing file with the new information.
+When using the command line, there is no \texttt{Undo} command.
+Once we do that, it cant be undone.
+\end{information}
 
 Once you've had a quick look at the file, exit the less pager and delete the file using the \texttt{rm} command.
 \begin{lstlisting}
@@ -195,7 +194,7 @@ The suffix \texttt{.gff} really just denoted a specific structure within the tex
 Most software that uses a file in this format will manually check for the correct structure first.
 However, when working in the bioinformatics field,  you will often see or require compressed files .
 This is a common enough concept for even Windows and MAC users, but a few specific compression types are commonly used in bioinformatics.
-The man differences are in the compression algorithms used, and that is beyond the scope of what most of us need to worry about.
+The main differences are in the compression algorithms used, and that is far beyond the scope of what most of us need to worry about.
 \end{information}
 
 The most common types of compression you will see are:\\
@@ -223,25 +222,25 @@ To explore what these command-line options do, please check the \texttt{man} pag
 \begin{steps}
 Just to demonstrate how we do this on the command line, we could compress one of our fastq files
 \begin{lstlisting}
-cd ~/firstname
-gzip myReads1.fq
+cd ~/Documents/trainingData
+gzip pair1.fq
 \end{lstlisting}
 \end{steps}
 
 \begin{questions}
 How would we now decompress (or extract) this file?\\
 \begin{answer}
-\texttt{gunzip  myReads1.fq.gz}\\
+\texttt{gunzip  pair1.fq.gz}\\
 \end{answer}
 
 How could we have kept our compressed file, along with the decompressed output?\\
 \begin{answer}
-\texttt{gunzip -k myReads1.fq.gz}\\
+\texttt{gunzip -k pair1.fq.gz}\\
 \end{answer}
 
 Why would we use \texttt{zcat} instead of \texttt{gunzip -c}?\\
 \begin{answer}
-We need less typing, and it's easier to read back
+It's less typing, and it's easier to read back
 \end{answer}
 \end{questions}
 

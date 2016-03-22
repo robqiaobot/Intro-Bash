@@ -22,7 +22,7 @@ Instead of the \texttt{man} page for \texttt{sed} the \texttt{info sed} page is 
 This is a very powerful command which can be a little overwhelming at first.
 If using this for your own scripts \& you can't figure something out, remember ``Google is your friend'' \& sites like \url{www.stackoverflow.com} are full of people wrestling with similar problems to you.
 You can be certain you're not the first person to be stumped by a problem \& these are great places to start looking for help. 
-Even advanced programmers use google \& stackoverflow to find solutions.\\
+Even advanced programmers use Google \& Stack Overflow to find solutions.\\
 \end{information}
 
 For today, there are two key \texttt{sed} functionalities that we want to introduce.\\
@@ -33,7 +33,11 @@ For today, there are two key \texttt{sed} functionalities that we want to introd
 
 \subsection*{Altering a file or other input}
 \texttt{sed} uses \textit{regular expressions} that we have come across under the \texttt{grep} section, and we can use these to replace strings or characters within a text string.
-The command works in the form \texttt{sed `SCRIPT' INPUT}, and the script section is where all the action happens.
+The command works in the form 
+\begin{lstlisting}[style=command_syntax]
+sed SCRIPT INPUT
+\end{lstlisting}
+and the script section is where all the action happens.
 Input can be given to \texttt{sed} as either a file, or just as a text stream via \texttt{stdin} using the \textit{pipe} symbol that we have already introduced.
 
 \begin{steps}
@@ -95,16 +99,16 @@ By default \texttt{sed} will print the entire input stream it receives, but sett
 Try this by adding an `n' immediately after the `-r' in one of the above lines \& you will notice you receive no output.
 This is useful if we wish to restrict our output to a subset of lines within a file, and by including a `p' at the end of the script section, only the section matching the results of the script will be printed.
 \begin{steps}
-Make sure you are in the \texttt{\~{}/firstname} directory \& we can look through the file \textit{myReads1.fq} again.
+Make sure you are in the correct directory \& we can look through the file \textit{pair1.fq} again.
 \begin{lstlisting}
-sed -n '1,10p' myReads1.fq
+sed -n '1,10p' pair1.fq
 \end{lstlisting}
 This will print the first 10 lines, like the \texttt{head} command will by default.
 However, we could now print any range of lines we choose.
 Try this by changing the script to something interesting like `101,112p'.
 We could also restrict the range to specific lines by using the \texttt{sed} increment operator `\~{}'.
 \begin{lstlisting}
-sed -n '1~4p' myReads1.fq
+sed -n '1~4p' pair1.fq
 \end{lstlisting}
 This will print every 4th line, beginning at the first, effectively giving just the sequence identifiers from this set of reads.
 We could use this just to extract the sequences themselves, or the quality scores.
@@ -115,23 +119,23 @@ The previous command prints every 4th line, but isn't restricted to any range wi
 How could we restrict the output to just the first 10 identifiers? \\
 \begin{answer}
 We could pipe the output to another \texttt{sed} command or  to head.\\
-\texttt{sed -n `1\~{}4p' myReads1.fq | sed -n `1,10 p'} \\
-\texttt{sed -n `1\~{}4p' myReads1.fq | head -n10} \\
+\texttt{sed -n `1\~{}4p' pair1.fq | sed -n `1,10 p'} \\
+\texttt{sed -n `1\~{}4p' pair1.fq | head -n10} \\
 \end{answer}
 
 This also gives us a simple way of counting the reads in the file.
 Try to think of a way of doing this using the pipe symbol.\\
 \begin{answer}
-\texttt{sed -n '1\~{}4p' myReads1.fq | wc -l} \\
+\texttt{sed -n '1\~{}4p' pair1.fq | wc -l} \\
 or \\
-\texttt{sed -n '1\~{}4p' myReads1.fq | egrep -c '\^{}@'}
+\texttt{sed -n '1\~{}4p' pair1.fq | egrep -c '\^{}@'}
 \end{answer}
 \end{questions}
 
 \begin{steps}
 We can also make sed operate like \texttt{grep} by making it only print the lines which match a pattern.
 \begin{lstlisting}
-sed -rn '/TGCAGGCTCT.+(GA){2}.+/ p' myReads1.fq
+sed -rn '/TGCAGGCTCT.+(GA){2}.+/ p' pair1.fq
 \end{lstlisting}
 Note however, that the line numbers are not present in this output.
 \end{steps}
@@ -206,14 +210,14 @@ Moving on to \texttt{awk}, this is a very useful tool which can be used either a
 We'll just use it as a command today, and it is extremely useful for dealing with tab- or comma-separated files, such as we often see in biological data.\\
 \begin{information}
 The basic structure of an \texttt{awk} command is: 
-\begin{center}
-\texttt{awk `/<pattern>/' file} 
-\end{center}
+\begin{lstlisting}[style=command_syntax]
+awk `/<pattern>/' file
+\end{lstlisting}
 \texttt{awk} will then search the file and output any line containing the regular expression pattern (kind of like \texttt{grep)}.
 With \texttt{awk}, you can also do: 
-\begin{center}
+\begin{lstlisting}[style=command_syntax]
 \texttt{awk `\{<code>\}' file} 
-\end{center}
+\end{lstlisting}
 where you can put a little awk program in the curly braces. 
 You can specify values from different columns of the file as \$1, \$2, etc., (or you can use \$0 for the whole line).
 \end{information}

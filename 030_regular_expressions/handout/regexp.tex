@@ -31,7 +31,7 @@ The built-in command which searches using regular expressions in the terminal is
 This function searches a file or input on a line-by-line basis, making patterns split across lines more difficult to find, which is one place that a programming language like Python or Perl would become preferable..  
 The \texttt{man grep} page contains more detail on regular expressions under the \texttt{REGULAR EXPRESSIONS} header (scroll down a few pages).  
 As can be seen in the \texttt{man} page, the command follows the form
-\begin{lstlisting}
+\begin{lstlisting}[style=command_syntax]
 grep [OPTIONS] 'pattern' filename
 \end{lstlisting}
 The option \texttt{-E} is preferable as it it stand for Extended, which we can think of as ``Easier''.
@@ -123,40 +123,33 @@ grep -c 'louse' words
 \end{steps}
 
 \section{Pattern Matching in DNA sequences}
-Now we can have a look through the RAD-Seq file that we moved \& renamed earlier.
-Before we search the the file \texttt{myReads1.fq}, we should know what we this data actually is.
-These are a small subset of 100bp reads from a RAD-Seq experiment \& are from the first sample in a set of paired reads.
+\begin{information}
+Now we can have a look through the GBS-Seq file (\texttt{pair1.fq}) that we copied \& renamed earlier.
+Before we search the the file, we should know what we this data actually is.
+These are a small subset of 100bp reads from a GBS-Seq experiment \& are from the first sample in a set of paired reads.
 Although we can't tell this directly from this file, the sequences were obtained from a rabbit affected by \textit{calicivirus}.
-\begin{steps}
-Change into the directory we created earlier using your name.
-\begin{lstlisting}
-cd ~/firstname
-\end{lstlisting}
-\end{steps}
+\end{information}
 
 \begin{steps}
 If you inspect the data using the \texttt{head} command, you'll notice that the file is in sets of four lines, as defined by the fastq format.
 \begin{lstlisting}
-head myReads1.fq
+head pair1.fq
 \end{lstlisting}
 The first line contains a \textit{sequence identifier}, the second line is the \textit{sequence} itself, the third line is simply the `+' symbol as a placeholder \& the final line is a set of characters which correspond to \textit{quality scores} for each base.
+We'll be looking at this file structure in much more detail next week, so that's all we need to know for today's session.
 \end{steps}
 
 \begin{questions}
 As these reads are from the first sample in a set of paired reads, the final value in the sequence identifier is \texttt{\_1}.
 How could we search for a pattern just to extract the sequence identifiers? \\
 \begin{answer}
-\texttt{grep -E `\^{}@.+\_1\$' myReads1.fq}
+\texttt{grep -E `\^{}@.+\_1\$' pair1.fq}
 \end{answer}
 
-How could we check for any sequences which may accidentally be included from the second sample in the pair of reads?
-Hint: These identifiers would finish with \texttt{\_2} \\
+Reads from the second in the set of paired reads would have an identifier that ends with the pattern \texttt{\_2}.
+There are no reads in the file \texttt{pair1.fq} that are the second pair, so what would you expect to see if you changed the \texttt{\_1} in the previous query to \texttt{\_2}? \\
 \begin{answer}
-I'm hoping they will try to search for the incorrect string \\
-\texttt{grep -E `\^{}@.+\_2' myReads1.fq}.\\
-The correct command should be: \\
-\texttt{grep -E `\^{}@.+\_2\$' myReads1.fq} \\
-which should give no results. \\
+If they didn't include the EOL symbol, they'll get results...
 \end{answer}
 
 \end{questions}
@@ -164,14 +157,14 @@ which should give no results. \\
 \begin{steps}
 Now we'll try searching for some sequences, so try the following search string. 
 Does the output match what you expected? \\
-\texttt{grep -En `TGCAGGCTCT' myReads1.fq}
+\texttt{grep -En `TGCAGGCTCT' pair1.fq}
 \end{steps}
 
 This should give lines 774, 3382, 3758, 7326, 7594 \& 9566 along with the sequence information and matching fragment highlighted in red.\\
 
 \begin{questions}
 For the following search string \\
-\texttt{grep -En `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq} \\
+\texttt{grep -En `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' pair1.fq} \\
 What do the following components of the pattern match to: \\
 \texttt{`.+'} \\
 \begin{answer}
@@ -190,8 +183,7 @@ This matches three `A's in a row. \\
 
 How could you find the sequence identifier for the above match?\\
 \begin{answer}
-\texttt{grep -EnC1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq} or \\
-\texttt{grep -EnB1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' myReads1.fq}
+\texttt{grep -EnC1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' pair1.fq} or \\
+\texttt{grep -EnB1 `TGCAGGCTCT.+(GA)\{2\}.+A\{3\}' pair1.fq}
 \end{answer}
 \end{questions}
-
