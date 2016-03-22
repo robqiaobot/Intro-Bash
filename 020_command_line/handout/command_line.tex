@@ -43,7 +43,7 @@ The important thing is to become familiar with the basic syntax for commands, ho
 \section{Finding your way around}
 \begin{steps}
 Firstly we need to open a terminal, so either click on the terminal icon on the desktop, or go to \textit{Applications \textgreater Accessories \textgreater Terminal} on the drop-down menu at the top-left of your screen.
-You will notice the text \texttt{trainee@intro-ubuntu-XXX:\~{}\$} where \texttt{trainee} is the username that we have assigned to you, and \texttt{intro-ubuntu-XXX} indicates which virtual machine you have been assigned to.
+You will notice the text \texttt{trainee@intro-bioinf-XXX:\~{}\$} where \texttt{trainee} is the username that we have assigned to you, and \texttt{intro-bioinf-XXX} indicates which virtual machine you have been assigned to.
 The tilde represents your current directory (explained later), whilst the dollar sign just indicates the end of the address \& the beginning of where you will type commands. \\
 \end{steps}
 
@@ -397,7 +397,7 @@ Have a look at the useful options \& try to understand what they will do if spec
 \textbf{Command} & \textbf{Description of function} & \textbf{Useful options} \\ \hline
 \texttt{man} & Display on-line manual & -k (search for keywords if you don't know the command) \\ \hline
 \texttt{pwd} & Print working directory, i.e show where you are & none commonly used \\ \hline
-\texttt{ls} & List contents of a directory & -a, -h, -l \\ \hline
+\texttt{ls} & List contents of a directory & -a, -h, -l, -S, -t, -R \\ \hline
 \texttt{cd} & Change directory & (scroll down in \texttt{man builtins} to find \texttt{cd}) \\ \hline
 \texttt{mv} & & -b, -f, -u \\ \hline
 \texttt{cp} & & -b, -f, -u \\ \hline
@@ -468,7 +468,60 @@ First, let's create a personal directory under \texttt{/home/trainee} with your 
 cd ~
 mkdir firstname
 \end{lstlisting}
+
+Now we can change into this directory.
+\begin{lstlisting}
+cd firstname
+\end{lstlisting}
+
+Create an empty text file.
+\begin{lstlisting}
+touch hello.txt
+\end{lstlisting}
+
+We can read it, but it won't have anything in it yet.
+\begin{lstlisting}
+cat hello.txt
+\end{lstlisting}
+
+Obviously nothing was printed to your terminal in the previous line because the file is empty.
+Let's write something to the file, then try reading it again.
+\begin{lstlisting}
+echo 'Hello' >> hello.txt
+cat hello.txt
+\end{lstlisting}
+
+We can find a whole lot of information about the file.
+\begin{lstlisting}
+wc hello.txt
+\end{lstlisting}
 \end{steps}
+
+\begin{questions}
+In the previous line, what do the three numbers represent?
+\begin{answer}
+The lines, word \& bytes (or characters)
+\end{answer}
+\end{questions}
+
+\begin{information}
+When we added the word \texttt{Hello} to our file, we used the symbol $>>$ which wrote the word to the end of the file.
+As the file was completely empty, this placed the word in the first line.
+\end{information}
+
+\begin{steps}
+Now let's add more to the file.
+\begin{lstlisting}
+echo 'It's me' >> hello.txt
+cat hello.txt
+wc hello.txt
+\end{lstlisting}
+\end{steps}
+
+\begin{note}
+For most of the above commands we could have used the auto-complete feature of the bash terminal.
+Did you remember this trick?
+\end{note}
 
 \begin{steps}
 In the \texttt{\~{}/Documents/trainingData} directory, you will find the file \texttt{pair1.fq}
@@ -502,12 +555,14 @@ We can even find how many lines there are in the file by using \\
 \begin{lstlisting}
 wc -l ~/firstname/myReads1.fq
 \end{lstlisting}
-\end{steps}
 
-\begin{note}
-For all the above commands we could have used the auto-complete feature of the bash terminal.
-Did you remember this trick?
-\end{note}
+We don't need the file anymore, so now we can delete it.
+What a waste!!!
+\begin{lstlisting}
+rm ~/firstname/myReads1.fq
+\end{lstlisting}
+
+\end{steps}
 
 \begin{questions}
 Did we need to enter the full file path in the above commands, or could we have saved ourselves some effort by changing into the \texttt{\~{}/firstname} directory? \\
