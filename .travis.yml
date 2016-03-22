@@ -12,5 +12,14 @@ before_install:
 script:
   - sudo -E make tex_env
   - make all
-after_success:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then bash ./developers/deploy-ghpages.sh; fi
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "travis-ci"
+  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@${GH_REF} gh-pages > /dev/null
+  - cd gh-pages
+  - rm -f pdfs-latest/*.pdf
+  - cp -Rf ../*.pdf ./pdfs-latest
+  - git add -f .
+  - git commit -m "Lastest PDFs on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
+  - git push -fq origin gh-pages > /dev/null
+#after_success:
+#  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then bash ./developers/deploy-ghpages.sh; fi
