@@ -216,10 +216,11 @@ awk `/<pattern>/' file
 \texttt{awk} will then search the file and output any line containing the regular expression pattern (kind of like \texttt{grep)}.
 With \texttt{awk}, you can also do: 
 \begin{lstlisting}[style=command_syntax]
-\texttt{awk `\{<code>\}' file} 
+awk `\{<code>\}' file
 \end{lstlisting}
-where you can put a little awk program in the curly braces. 
-You can specify values from different columns of the file as \$1, \$2, etc., (or you can use \$0 for the whole line).
+where you can put a program, or set of instructions in the curly braces. 
+In the code, you can specify values from different columns of the file by using the numbers \$1, \$2, etc., (or you can use \$0 for the whole line).
+Values can also be returned in the output by using the command \texttt{print} followed by the field number.
 \end{information}
 
 \begin{steps}
