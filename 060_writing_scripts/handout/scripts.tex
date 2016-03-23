@@ -5,6 +5,7 @@
 }
 \setModuleContributions{%
   Dan Kortschak, Adelson Research Group, University of Adelaide \mailto{dan.kortschak@adelaide.edu.au} \\
+  Jimmy Breen, Robinson Research Institute \& Bioinformatics Hub, University of Adelaide \mailto{jimmy.breen@adelaide.edu.au}\\
 }
 
 %----------------------------------------------------------------------------------------
@@ -300,3 +301,53 @@ Can you write a script to change these identifiers back to the correct format?
 You can omit the machine identifier, or just make a name up if you feel like it.
 \end{advanced}
 
+\begin{Scalability}
+Unfortunately when working with large datasets, the amount of resources available on your computer are insufficient enough to make your script finish in a reasonable time. For these large datasets, it maybe useful to work on a high performance computing system, which will enable your data or command to be run simultaneously on >8 threads. It is possible to gain access to large computing resources through eResearch SA \url{https://www.ersa.edu.au}, enabling analysis of large datasets efficiently.\\ 
+
+Their large machine called "Tizard" does not run using BASH, instead using a different command-line shell called csh (or the C shell). This shell is very similar to BASH, but can have different syntax elements, much like different programming languages.\\
+
+e.g. \\
+\begin{lstlisting}
+
+# To set your path in bash
+export PATH=/home/stevep/bin:$PATH
+
+# To set your path in csh
+setenv PATH $PATH:/home/stevep/bin
+
+\end{lstlisting}
+
+By having many users on one machine at one time means that there needs to be a system that determines who runs what and when. Tizard uses a "queuing" system, whereby users submit jobs to a queue, and then executed when a spot on the machine opens up. The command is executed using a PBS script (shown below). This script is written in csh (not bash) and contains extra parameters such as: \\
+\begin{enumerate}
+\item Wall Time: Time it takes to complete
+\item Amount of memory to allocate to the job
+\item Number of "nodes". \\
+\end{enumerate}
+
+\begin{lstlisting}
+
+#!/bin/csh
+#PBS -N Squamates_RLC_Uni20_Log1_1
+#PBS -j oe
+#PBS -m ae
+#PBS -M your.name@adelaide.edu.au
+#PBS -q tizard
+#PBS -l nodes=1:ppn=1
+#PBS -l mem=8000mb
+#PBS -l vmem=8000mb
+#PBS -l walltime=100:00:00
+
+
+echo Working dir is $PBS_O_WORKDIR
+cd $PBS_O_WORKDIR
+echo RUnning on host `hostname`
+echo Time is `date`
+
+module load java/java-1.7.09
+module load beast/1.8.0
+module load beaglebeast/readonlylib-1.0
+
+java -Xms128m -Xmx4096m  -jar /opt/shared/beast/1.8.0/lib/beast.jar -overwrite -beagle -seed 111111111 Squamates_RLC_Uni20_Log1.xml > Squamates_RLC_Uni20_Log1-$PBS_JOBID.output
+\end{lstlisting}
+
+This script will allow users to submit a BEAST job (Bayesian analysis of molecular sequences using MCMC) to tizard, and will email when its done. \\
