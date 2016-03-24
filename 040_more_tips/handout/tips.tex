@@ -51,7 +51,7 @@ This is where the concept of \texttt{stdout} becomes more important. \\
 \end{information}
 
 \begin{steps}
-By default, most command-line tools print their output to \texttt{stdout} but instead, we can send this to another tool using the pipe (|) symbol.
+By default, most command-line tools print their output to \texttt{stdout} but instead, we can send this to another tool using the pipe (\texttt{|}) symbol.
 This is exactly like putting a pipe on the output of one process, and routing it to the \textit{standard input} or \texttt{stdin} of another.
 We can use this to build up a series or chain of processes in a single line.
 A trivial example might be match a word segment.
@@ -100,91 +100,6 @@ Once you've had a quick look at the file, exit the less pager and delete the fil
 \begin{lstlisting}
 rm SeqIDs.txt
 \end{lstlisting}
-
-\section{Downloading Data}
-
-\begin{steps}
-The terminal makes obtaining data from any publicly available sources very easy using the command \texttt{wget}, once you know the location of a file.
-Let's find a genome to download by opening Firefox \& heading to \texttt{ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/}.
-Here we can see a list of all the Bacteria which have genome information available.
-Open one of the folders to have a look at the contents, or if you'd like scroll down to everyone's favourite probiotic \texttt{Lactobacillus\_acidophilus\_30SC\_uid63605}.
-We'll download the \textit{General Feature Format} file with the suffix \texttt{.gff} file which contains information about any identified genomic features.
-If you've chosen Lactobacillus, we'll download the file NC\_015214.gff.
-Right-click on the file \& select \textit{Copy Link Location}.
-If you're not already in your personal directory, i.e. \texttt{\~{}/firstname} then change into this directory and type the command \texttt{wget}.
-Once you've typed this command, right-click and paste the contents of the clipboard to give the following (apologies for the small font):
-\end{steps}
-
-\begin{lstlisting}[basicstyle=\tiny]
-wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Lactobacillus_acidophilus_30SC_uid63605/NC_015214.gff
-\end{lstlisting}
-
-This will download the selected file into your current working directory.
-Don't forget to have a look at the \texttt{man} page to make sure you understand how the command works.
-
-\begin{steps}
-The first 5 lines of this file is what we refer to as a \textit{header}, which contains important information about how the file was generated in a standardised format.
-Many file formats have these structures at the beginning but for our purposes today we don't need to use any of this information so we can move on.
-Have a look at the beginning of the file to see what it looks like.
-\end{steps}
-\begin{lstlisting}
-head NC_015214.gff
-\end{lstlisting}
-
-Notice the header lines begin with one or two hash symbols, and the remainder of the file contains information about the genomic features.
-The first feature is annotated as a \textit{region} in the third field, whilst the second feature is annotated as a \textit{gene}.
-
-\begin{questions}
-How many features are contained in this file?\\
-\begin{answer}
-\texttt{wc -l NC\_015214.gff} \\
-This will give 4355, but the first 5 lines are header lines.
-To count the non-header lines you could try several things:\\
-\texttt{grep -vc `\^{}\#' NC\_015214.gff} \\
-or\\
-\texttt{grep -c `\^{}[\^{}\#]' NC\_015214.gff} \\
-\end{answer}
-
-\end{questions}
-
-\begin{bonus}
-As mentioned above, this file contains multiple features such as \textit{regions}, \textit{genes}, \textit{CDSs}, \textit{exons} or \textit{tRNAs}.
-If we wanted to find how many regions are annotated in this file we could use the processes we've learned above: \\
-\texttt{grep -c `region' NC\_015214.gff} \\
-
-If we wanted to count how many genes are annotated, the first idea we might have would be to do something similar using a search for the pattern \texttt{`gene'}. \\
-\begin{questions}
-Do you think this is the number of genes?
-Try searching for the number of coding DNA sequences using the same approach (i.e. CDS) \& then add the two numbers?
-Is this more than the total number of features we found earlier?
-Can you think of a way around this using regular expressions?
-\begin{answer}
-Note that some of the occurrences of the word \textit{gene} appears in many lines which are not genes.
-We need to restrict the search to one of the tab-separated fields by including a white-space character in the search.
-The command:\\
-\texttt{grep -En `\textbackslash sgene\textbackslash s' NC\_015214.gff | wc -l} \\
-will give a much different result as now we are searching for the word gene surrounded by white-space.
-\end{answer}
-
-Alternatively, there is a command \texttt{cut} available.
-Call the manual page (\texttt{man cut}) and inspect the option \texttt{-f}.
-The information about the types of features annotated is in the third field.
-Try to think of a way of searching this field alone.
-\begin{answer}
-\texttt{cut -f3 NC\_015214.gff | grep -c `gene'}
-Or even more accurately
-\texttt{egrep -v '\^{}\#' NC\_015214.gff | cut -f3 | egrep -c `gene'}
-although it gives the same results in this instance
-\end{answer}
-
-A similar question to a few pages back would be how many \textit{types} of features are in this file?
-The commands \texttt{cut}, along with \texttt{sort} and \texttt{uniq} may prove to be useful when answering this
-\begin{answer}
-\texttt{egrep -v '\^{}\#' NC\_015214.gff | cut -f3 | sort | uniq | wc -l}
-\end{answer}
-
-\end{questions}
-\end{bonus}
 
 \section{Working With Compressed Files}
 
@@ -243,5 +158,102 @@ Why would we use \texttt{zcat} instead of \texttt{gunzip -c}?\\
 It's less typing, and it's easier to read back
 \end{answer}
 \end{questions}
+
+\section{Downloading Data}
+
+\begin{steps}
+The terminal makes obtaining data from any publicly available sources very easy using the command \texttt{wget}, once you know the location of a file.
+Let's find a genome to download by opening Firefox \& heading to \url{http://www.ncbi.nlm.nih.gov/genome/1099}.
+This is the page for everyone's favourite probiotic \texttt{Lactobacillus\_acidophilus}.
+We'll download the \textit{General Feature Format} file with the suffix \texttt{.gff} file which contains information about any identified genomic features, and the link to this is in the box at the top of the page.
+Right-click on the link to the GFF \& select \textit{Copy Link Location}.
+Now head back to the terminal , and if you're not already in your personal directory, i.e. \texttt{\~{}/firstname} then change into this directory and type the command \texttt{wget}.
+Once you've typed this command, right-click and paste the contents of the clipboard to give the following (apologies for the small font):
+\end{steps}
+
+\begin{lstlisting}[basicstyle=\tiny]
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000011985.1_ASM1198v1/GCF_000011985.1_ASM1198v1_genomic.gff.gz
+\end{lstlisting}
+
+This will download the selected file into your current working directory.
+Don't forget to have a look at the \texttt{man} page to make sure you understand how the command works.
+
+\begin{steps}
+This file has been downloaded as a compressed file using the \texttt{gzip} program so the first thing we need to do is uncompress it.
+\begin{lstlisting}
+gunzip GCF_000011985.1_ASM1198v1_genomic.gff.gz
+\end{lstlisting}
+Don't forget to use tab auto-complete!
+\end{steps}
+
+
+\begin{steps}
+The first 5 lines of this file is what we refer to as a \textit{header}, which contains important information about how the file was generated in a standardised format.
+Many file formats have these structures at the beginning but for our purposes today we don't need to use any of this information so we can move on.
+Have a look at the beginning of the file to see what it looks like.
+\end{steps}
+\begin{lstlisting}
+head GCF_000011985.1_ASM1198v1_genomic.gff
+\end{lstlisting}
+
+This file begins with a few lines of header information which begin with one or two hash symbols.
+These lines contain helpful information about how the file was generated.
+The remainder of the file contains information about the genomic features themselves, in tab-separated format.
+Each line represents a genomic feature, and the tab-separated values correspond to columns in a spreadsheet.
+The first feature is annotated as a \textit{region} in the third field, whilst the second feature is annotated as a \textit{gene}.
+
+\begin{questions}
+How many features are contained in this file?\\
+\begin{answer}
+\texttt{wc -l GCF\_000011985.1\_ASM1198v1\_genomic.gff} \\
+This will give 4355, but the first 5 lines are header lines.
+To count the non-header lines you could try several things:\\
+\texttt{grep -vc `\^{}\#' GCF\_000011985.1\_ASM1198v1\_genomic.gff} \\
+or\\
+\texttt{grep -c `\^{}[\^{}\#]' GCF\_000011985.1\_ASM1198v1\_genomic.gff} \\
+\end{answer}
+
+\end{questions}
+
+\begin{bonus}
+As mentioned above, this file contains multiple features such as \textit{regions}, \textit{genes}, \textit{CDSs}, \textit{exons} or \textit{tRNAs}.
+If we wanted to find how many regions are annotated in this file we could use the processes we've learned above: \\
+\texttt{grep -c `region' GCF\_000011985.1\_ASM1198v1\_genomic.gff} \\
+
+If we wanted to count how many genes are annotated, the first idea we might have would be to do something similar using a search for the pattern \texttt{`gene'}. \\
+\begin{questions}
+Do you think this is the number of genes?
+Try searching for the number of coding DNA sequences using the same approach (i.e. CDS) \& then add the two numbers?
+Is this more than the total number of features we found earlier?
+Can you think of a way around this using regular expressions?
+\begin{answer}
+Note that some of the occurrences of the word \textit{gene} appears in many lines which are not genes.
+We need to restrict the search to one of the tab-separated fields by including a white-space character in the search.
+The command:\\
+\texttt{grep -En `\textbackslash sgene\textbackslash s' GCF\_000011985.1\_ASM1198v1\_genomic.gff | wc -l} \\
+will give a much different result as now we are searching for the word gene surrounded by white-space.
+\end{answer}
+
+Alternatively, there is a command \texttt{cut} available.
+Call the manual page (\texttt{man cut}) and inspect the option \texttt{-f}.
+The information about the types of features annotated is in the third field.
+Try to think of a way of searching this field alone.
+\begin{answer}
+\texttt{cut -f3 GCF\_000011985.1\_ASM1198v1\_genomic.gff | grep -c `gene'}
+Or even more accurately
+\texttt{egrep -v '\^{}\#' GCF\_000011985.1\_ASM1198v1\_genomic.gff | cut -f3 | egrep -c `gene'}
+although it gives the same results in this instance
+\end{answer}
+
+A similar question to a few pages back would be how many \textit{types} of features are in this file?
+The commands \texttt{cut}, along with \texttt{sort} and \texttt{uniq} may prove to be useful when answering this
+\begin{answer}
+\texttt{egrep -v '\^{}\#' GCF\_000011985.1\_ASM1198v1\_genomic.gff | cut -f3 | sort | uniq | wc -l}
+\end{answer}
+
+\end{questions}
+\end{bonus}
+
+
 
 

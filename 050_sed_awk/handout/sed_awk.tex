@@ -227,13 +227,13 @@ Values can also be returned in the output by using the command \texttt{print} fo
 We have that *.gff file and we've already looked at it at little, so let's pull out some particular features!
 Make your terminal as wide as the screen, then change into the appropriate directory \& enter
 \begin{lstlisting}
-awk '{if  ($3=="rRNA")  print $0}' NC_015214.gff
+awk '{if  ($3=="rRNA")  print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
 Here we've specified that the third field must be an rRNA, so this will give us all of the ribosomal RNAs annotated in the file. \\
 
 We could make it a little more complex and just look for genes in a given region
 \begin{lstlisting}
-awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' NC_015214.gff
+awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
 \end{steps}
 \begin{note}
@@ -250,12 +250,12 @@ You've just written (\& hopefully understood) a computer program!
 \begin{steps}
 Another example (what does this do?): \\
 \begin{lstlisting}
-awk '{if (($5 - $4 > 1000) && ($3 == "gene")) print $0}' NC_015214.gff 
+awk '{if (($5 - $4 > 1000) && ($3 == "gene")) print $0}' GCF_000011985.1_ASM1198v1_genomic.gff 
 \end{lstlisting}
 If you don't want to output all of the columns, you can specify which ones to output.  
 While we're at it, let's save the output as a file: \\
 \begin{lstlisting}
-awk '{if (($5 - $4 > 1000) && ($3 == "gene")) print $1, $2, $4, $5, $9}' NC_015214.gff > awkout.txt
+awk '{if (($5 - $4 > 1000) && ($3 == "gene")) print $1, $2, $4, $5, $9}' GCF_000011985.1_ASM1198v1_genomic.gff > awkout.txt
 \end{lstlisting}
 \end{steps}
 

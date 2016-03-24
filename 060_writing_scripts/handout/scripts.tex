@@ -57,7 +57,7 @@ We don't to enter this character when we create our script.
 Note that the line numbers on the left of the code don't change when this happens, e.g. line 9.
 \end{warning}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=command_syntax]
 #!/bin/bash
 
 # First we'll declare some variables with some text strings
@@ -103,7 +103,7 @@ Most command line tools use strictly lower-case names, so this is another reason
 Unfortunately, this script cannot be executed yet but we can easily enable execution of the code inside the script.
 If you recall the flags from earlier which denoted the read/write/execute permissions of a file, all we need to do is set the execute permission for this file.
 First we'll look at the files in the folder using \texttt{ls -l} and note these triplets should be \texttt{rw-} for the user \& the group you belong to.
-To make this script executable, enter the following
+To make this script executable, enter the following in your terminal.
 \begin{lstlisting}
 cd ~/firstname
 chmod +x wellDone.sh
@@ -151,7 +151,7 @@ for n in Boris Fred; do (./wellDone2.sh $n); done
 \end{advanced}
 
 \subsubsection*{A Script That Does Something Relevant}
-\begin{lstlisting}
+\begin{lstlisting}[style=command_syntax]
 #!/bin/bash
 FILE=$1
 
@@ -224,7 +224,7 @@ Here's a more complicated script with some more formal procedures.
 This is a script which will extract only the CDS features from the .gff file we have been working with, and export them to a separate file.
 Look through each line carefully \& make write down your understanding of what each line is asking the program to do.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=command_syntax]
 #!/bin/bash
 
 # Declare some helpful variables
@@ -346,13 +346,14 @@ Having many users on one machine at one time also means that there needs to be a
 Tizard uses a "queuing" system, whereby users submit jobs to a queue, and then executed when the appropriate resources on the machine become available. 
 The command is executed using a Portable Batch System (PBS) script (shown below). 
 This script is written in \texttt{csh} (not \texttt{bash}) and contains extra parameters such as:
-\begin{enumerate}
-\item Wall Time - The maximum time it is allowed to takes to completion
+
+\begin{itemize}
+\item Wall Time (The maximum time it is allowed to takes to completion)
 \item Amount of memory to allocate to the job
 \item Number of "nodes". 
-\end{enumerate}
+\end{itemize}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=command_syntax]
 #!/bin/csh
 #PBS -N Squamates_RLC_Uni20_Log1_1
 #PBS -j oe
@@ -376,6 +377,8 @@ module load beaglebeast/readonlylib-1.0
 java -Xms128m -Xmx4096m  -jar /opt/shared/beast/1.8.0/lib/beast.jar -overwrite -beagle -seed 111111111 Squamates_RLC_Uni20_Log1.xml > Squamates_RLC_Uni20_Log1-$PBS_JOBID.output
 \end{lstlisting}
 
+We don't need to write this script.
+It is included here as a simple example of a real world script as used by researchers at ACAD.
 This script may look a little intimidating at first, but slowly work your way through each line \& try to understand what each line is specifying.
 This particular script will allow users to submit a BEAST job (Bayesian analysis of molecular sequences using MCMC) to tizard, and will email when its done.
 Also note that many of the commands will now look very familiar to you and in essence it is no more complex than the scripts we have written in the earlier sections.
