@@ -192,7 +192,7 @@ Single quotes at this point would only return the characters `\$f'.
 If statements are those which only have a binary `yes' or `no' response.
 For example, we could specify things like:
 \begin{itemize}
-\item \texttt{if} (i>1) then \texttt{do} something, or
+\item \texttt{if} (i$>1$) then \texttt{do} something, or
 \item \texttt{if} (fileName==bob.txt) then \texttt{do} something else
 \end{itemize}
 
@@ -200,7 +200,7 @@ For example, we could specify things like:
 Notice that in the second if statement, there was a double equals sign.
 This is the programmers way of saying \textit{compare} the first argument with the second argument.
 A single equals sign is generally interpreted by a program as \textit{assign} the value of the first argument to be the second argument.
-This use of `double operators' is very common, notably you will see \&\& to represent the command `\textit{and}', and || to represent `\textit{or}.'
+This use of `double operators' is very common, notably you will see \&\& to represent the command `\textit{and}', and $\Vert$ to represent `\textit{or}.'
 A final useful trick to be aware of is the use of an exclamation mark to reverse a command.
 A good example of this is the use of the command `!=' as the representation of \textit{not equal to} in a logical test.
 \end{information}
@@ -237,7 +237,7 @@ awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' GCF_0000119
 \end{lstlisting}
 \end{steps}
 \begin{note}
-In the above code, \texttt{\$3==''gene''} asks for the entry in the third field to be ``gene.''
+In the above code, \texttt{\$3==``gene''} asks for the entry in the third field to be ``gene.''
 The next two fragments request for the values in the fourth field (i.e. \$4) to be between 10000 \& 20000.
 Thus we have found all the features annotate as genes in a 10,000bp region of this genome.
 Notice that each these three commands were enclosed in a pair of brackets within an outer pair of brackets.

@@ -284,7 +284,7 @@ Now that we have written our first couple of scripts, the challenge for the rest
 You can use the gedit text editor for this \& it will automatically colour code as you go, which can be very helpful for seeing where you are as you write code.
 
 \begin{advanced}
-The restriction site for the RAD-Seq dataset we have is TGCAG.
+The restriction site for the GBS-Seq dataset we have is TGCAG.
 In the \texttt{~/trainingData} folder, we have both pairs of reads.
 Your challenge is to write a script to find:
 \begin{enumerate}
@@ -331,7 +331,7 @@ export PATH=/home/trainee/bin:$PATH
 \subsection{High Performance Computing}
 \begin{information}
 In current genomics era, where we regularly work with large datasets, the amount of resources available on desktop computers are often insufficient to enable your script finish in a reasonable time. 
-For these datasets, it maybe useful to work on a high performance computing system, which will enable your data or command to be run simultaneously on >8 threads, i.e. in parallel.
+For these datasets, it maybe useful to work on a high performance computing system, which will enable your data or command to be run simultaneously on $>8$ threads, i.e. in parallel.
 It is possible to gain access to large computing resources through eResearch SA \url{https://www.ersa.edu.au}, enabling analysis of large datasets efficiently.\\ 
 
 Their large machine called \texttt{tizard} does not run using the \texttt{bash} shell, instead using a different command-line shell called \texttt{csh}, or the C shell (cue a series of bad puns).
@@ -353,7 +353,7 @@ This script is written in \texttt{csh} (not \texttt{bash}) and contains extra pa
 \item Number of "nodes". 
 \end{itemize}
 
-\begin{lstlisting}[style=command_syntax]
+\begin{lstlisting}
 #!/bin/csh
 #PBS -N Squamates_RLC_Uni20_Log1_1
 #PBS -j oe
