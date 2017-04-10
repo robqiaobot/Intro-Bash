@@ -34,6 +34,10 @@ Good candidate examples for command-line analysis are:
 \item Job submission to HPC clusters
 \end{itemize}  
 
+Recording all processes as simple scripts also makes an entire analysis more reproducible, as you will have \textit{a record of every procedure you have performed}.
+It's amazing how often you'll need to revisit something you have performed months ago, and having records of what you've done is immensely useful.
+From the perspective of an ``electronic lab book", this is also very important.\\
+
 Today we'll explore a few commands to help you gain a little familiarity with some important ones, and to enable you to find help when you're working by yourself.
 We don't expect you to remember all the commands \& options from today.
 The important thing is to become familiar with the basic syntax for commands, how to put them together, and where to look for help when you're unsure.
@@ -41,23 +45,33 @@ The important thing is to become familiar with the basic syntax for commands, ho
 
 \clearpage
 \section{Finding your way around}
-\begin{steps}
-Firstly we need to open a terminal, so either click on the terminal icon on the desktop, or go to \textit{Applications \textgreater Accessories \textgreater Terminal} on the drop-down menu at the top-left of your screen.
-You will notice the text \texttt{trainee@intro-bioinf-XXX:\~{}\$} where \texttt{trainee} is the username that we have assigned to you, and \texttt{intro-bioinf-XXX} indicates which virtual machine you have been assigned to.
-The tilde represents your current directory (explained later), whilst the dollar sign just indicates the end of the address \& the beginning of where you will type commands. \\
-\end{steps}
-
 \begin{note}
+Firstly we need to open a terminal, so \textbf{click on the terminal icon} at the bottom of the desktop.
+There are several variants of the shell, such as the \textit{Bourne-again} shell (i.e. \texttt{bash}) and the \textit{C-shell} (please feel free to make all the jokes you can think of).
 The terminal has a library of commands which are built into it at the time of installing the operating system, and which are part of the Bourne-again Shell, or \textit{bash}.
 (Historically, it's a replacement for the earlier Bourne Shell, written by Stephen Bourne, so the name is actually a hilarious pun.)
-We'll explore a few of these commands below, and the word shell will often be used interchangeably with the terminal window.
+We'll explore a few of these commands below, and the words shell or bash will often be used interchangeably with the terminal window.
 Our apologies to any purists.
-If you've ever heard of the phrase \textit{shell scripts}, this refers to a series of these commands strung together into a text file which is then able to be executed as a single command.
+If you've ever heard of the phrase \textit{shell scripts}, this refers to a series of these commands strung together into a text file which is then able to be executed as a single command.\\
+\end{note}
+
+\begin{note}
+When you open the terminal on your VM, you'll see the phrase \texttt{hub@biohub:}$\sim$.
+This is simply username@computername:, and you may remember you logged on as \texttt{hub} during the setup.
+The tilde ($\sim$) represents a shorthand for your home directory, but we'll explore this more later.
 \end{note}
 
 \subsection{Where are we?}
+
+\begin{note}
+When navigating through the folders on any computer, we are all very familiar with clicking through from one folder to another.
+The folder currently being displayed is usually given in the header of the folder view, so we know where we are currently looking.
+When using \texttt{bash}, we don't click on anything so we need to type commands to change directories, and inspect the contents.
+\end{note}
+
 \begin{steps}
-Type the command \texttt{pwd} in the terminal and you will see the output \texttt{/home/trainee} appear.
+The first thing we need to do is find where we are, when we open \texttt{bash}.
+Type the command \texttt{pwd} in the terminal and you will see the output \texttt{/home/hub} appear.
 \begin{lstlisting}
 pwd
 \end{lstlisting}
@@ -71,17 +85,25 @@ Printing information to the terminal itself is what we refer to as printing to t
 \end{information}
 
 \begin{note}
-The directory path that appeared  (\texttt{/home/trainee})  is what will be referred to as your \textit{home directory} for the remainder of the workshop.
-This is also the information that the tilde (\~{}) represents as a shorthand version, so whenever you see the tilde in a directory path, this is interpreted as meaning \texttt{/home/trainee}. 
+The directory path that appeared  (\texttt{/home/hub})  is what will be referred to as your \textit{home directory} for the remainder of the workshop.
+This is also the information that the tilde (\~{}) represents as a shorthand version, so whenever you see the tilde in a directory path, this is interpreted as meaning \texttt{/home/hub}. 
 The \textit{working directory} simply refers to the directory on the computer where you are currently looking, and can be thought of as being the room you are in.
-We are very familiar with this concept graphically, as seen in the following image.
-Instead of using a graphical view, we simply have a text-based view.\\
+We are very familiar with this concept graphically but instead of using a graphical view, we simply have a text-based view.\\
 \end{note}
 
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=0.9\textwidth]{home.png}
-\end{figure}
+\subsection{Looking at the Contents of a Directory}
+\begin{steps}
+There is another built-in command ``\texttt{ls}'' that we can use to \textbf{\underline{l}}i\textbf{\underline{s}}t the contents of a directory.
+Enter the \texttt{ls} command as it is and it will list the contents of the current directory. \\
+\begin{lstlisting}
+ls 
+\end{lstlisting}
+\end{steps}
+
+\begin{steps}
+Now open your home folder using the icon at the bottom to give the more familiar, graphical view and compare the contents.
+\end{steps}
+
 
 \FloatBarrier
 \subsection{The Linux File System}
@@ -99,13 +121,6 @@ For example, the command \texttt{PWD} is completely different to \texttt{pwd} an
 Spaces are also highly important in Linux, so take note of them where-ever they appear in the given commands.
 \end{warning}
 
-\subsubsection*{Relative vs Absolute Paths}
-\begin{information}
-Also note that in your output from \texttt{pwd} the resulting path started with the slash, i.e. \textbf{/}\texttt{home/trainee}.
-This indicates that it is an \textbf{absolute path} as it began with the root of the file system ``/".
-If the slash was missing, it would refer to a sub-directory of the current working directory, and this is what we refer to as a \textbf{relative path}.
-This is an important point which will hopefully become more clear throughout the session.
-\end{information}
 
 \subsection{Changing Directories}
 \begin{information}
@@ -131,7 +146,7 @@ As detailed earlier, the output should be the root directory given as \texttt{/}
 We can change back to your personal home folder by entering one of either:
 \begin{steps}
 \begin{lstlisting}
-cd /home/trainee
+cd /home/hub
 \end{lstlisting}
 or \\
 \begin{lstlisting}
@@ -150,17 +165,10 @@ cd ../../
 \end{lstlisting}
 
 \begin{steps}
-Using the above process, return to your home directory \texttt{/home/trainee}. \\
+Using the above process, return to your home directory \texttt{/home/hub}. \\
 \end{steps}
 
-\subsection{Looking at the Contents of a Directory}
-\begin{steps}
-There is another built-in command ``\texttt{ls}'' that we can use to \textbf{\underline{l}}i\textbf{\underline{s}}t the contents of a directory.
-Enter the \texttt{ls} command as it is and it will list the contents of the current directory. \\
-\begin{lstlisting}
-ls 
-\end{lstlisting}
-\end{steps}
+\subsection{Viewing Directories Without Changing Where We Are}
 
 \begin{steps}
 Alternatively, we can specify which directory we wish to view the contents of, without having to change into that directory.
@@ -172,7 +180,7 @@ ls /
 \end{steps}
 
 Here you can see a whole raft of directories which contain the vital information for the computer's operating system.
-Among them should be the \texttt{/home} directory which is one level above your own home directory, and where the home directories for all users are located, as mentioned earlier.\\
+Among them should be the \texttt{/home} directory which is one level above your own home directory, and where the home directories for \textbf{all users} are located, as mentioned earlier.\\
 
 \begin{questions}
 Try to think of two ways we could inspect the contents of the \texttt{/home} directory from your own home directory. \\
@@ -184,10 +192,24 @@ or \\
 \end{questions}
 
 \begin{note}
-Notice that there are two entries in the \texttt{/home} directory. 
-One is your home directory (\texttt{/home/trainee}), whilst the other is the default home directory that came with the VM (\texttt{/home/ubuntu}) before we set up your home directory for today's workshop.
+Notice that there are more entries in the \texttt{/home} directory. 
+One is your home directory (\texttt{/home/hub}), whilst the other is the default home directory that came with the VM (\texttt{/home/ubuntu}) before we set up your home directory for today's workshop.
 Also note that if we ever refer to this higher-level directory, we will write it as \texttt{/home}, whereas your personal home directory is always referred to without the preceding forward-slash, and will also be written in normal text font instead of the font we specifically use for code. \\
 \end{note}
+
+
+\subsubsection*{Relative vs Absolute Paths}
+\begin{information}
+Also note that in your output from \texttt{pwd} the resulting path started with the slash, i.e. \textbf{/}\texttt{home/hub}.
+This indicates that it is an \textbf{absolute path} as it began with the root of the file system ``/".
+If the slash was missing, it would refer to a sub-directory of the current working directory, and this is what we refer to as a \textbf{relative path}.
+This is an important point which will hopefully become more clear throughout the session.\\
+
+Another simple example, is that from your home folder (\texttt{/home/hub}), the folder \texttt{Documents} can be called just using \texttt{Documents}.
+If you are in another folder, you'd probably have to use the full (or absolute) path, which is \texttt{/home/hub/Documents}.
+\end{information}
+
+
 
 \subsubsection*{A Handy Hint}
 \begin{information}
@@ -214,7 +236,7 @@ ls -l ~
 
 The above will give a few lines of output \& the first line should be something similar to
 \begin{center}
-\colorbox{black}{\texttt{\textcolor{white}{drwxr-xr-x 2 trainee trainee 4096 mmm dd hh:mm} \textcolor{light-blue}{\textbf{Desktop}}}}\\
+\colorbox{black}{\texttt{\textcolor{white}{drwxr-xr-x 2 hub hub 4096 mmm dd hh:mm} \textcolor{light-blue}{\textbf{Desktop}}}}\\
 \end{center}
 where \texttt{mmm dd hh:mm} are time and date information.\\
 
@@ -225,7 +247,7 @@ Formally, these letters are known as flags which identify key attributes about e
 We can ignore the fine detail in the rest of these flags until this afternoon (or see the bonus section), but the values \texttt{rwx} simply refer to who is able to \textbf{\underline{r}}ead, \textbf{\underline{w}}rite or e\textbf{\underline{x}}ecute the contents of the file or directory. 
 These are very helpful attributes for data security \& protection against malicious software.\\
 
-The entries \texttt{trainee trainee} respectively refer to who is the owner of the directory (or file) \& to which group it belongs.
+The entries \texttt{hub hub} respectively refer to who is the owner of the directory (or file) \& to which group they belong.
 Again, this information won't be particularly relevant to us today, so we can ignore this until later in our programming careers.
 In brief, on an Ubuntu system you could have every member of your lab group as an individual user, whilst making every member part of a group.
 File access permissions can then be applied to any file based on who created it, or whether they are a member of your lab group.
@@ -262,7 +284,7 @@ ls -l -R ~
 \end{lstlisting}
 
 the output will be given in two sections.
-The first is what we have seen previously, but following that will be the contents of the directory \texttt{/home/trainee/Desktop}.
+The first is what we have seen previously, but following that will be the contents of the directory \texttt{/home/hub/Desktop}.
 It should become immediately clear that the output from setting this option can get very large \& long depending on which directory you start from.
 It's probably not a good idea to enter \texttt{ls -l -R /} as this will print out the entire contents of your file system. \\
 
@@ -293,8 +315,10 @@ Also see \texttt{man kill} or \texttt{man killall} for details on how to kill a 
 \section{Exploring Commands In More Detail}
 
 \begin{information}
+Most commands we wish to use have a series of options (sometimes called flags) we are able to set.
+In reality no-one can remember the full suite of available options, so we need to find out how to get this information.
 In order to help us find what options are able to be specified, every command built-in to the shell has a manual, or a help page which can take some time to get familiar with.
-These help pages are displayed using the pager known as \texttt{less} which essentially turns the terminal window into a text viewer so we can display text in the terminal window, but with no capacity for us to edit the text. \\
+These help pages are displayed using the pager known as \texttt{less} which essentially turns the terminal window into a text viewer so \textit{we can display text in the terminal window}, but with no capacity for us to edit the text. \\
 \end{information}
 
 \begin{steps}
@@ -405,35 +429,35 @@ Have a look at the useful options \& try to understand what they will do if spec
 \texttt{rmdir} & & \\ \hline
 \texttt{mkdir} & & -p\\ \hline
 \texttt{cat} & & \\ \hline
-\texttt{less} & & \\ \hline
+%\texttt{less} & & \\ \hline
 \texttt{wc} & & -l \\ \hline
-\texttt{head} & & -n\# (e.g., -n100) \\ \hline
-\texttt{tail} & & -n\# (e.g., -n100) \\ \hline
+\texttt{head} & & -n \\ \hline
+\texttt{tail} & & -n \\ \hline
 \texttt{echo} & &  -e\\ \hline
 \texttt{cut} & & -d, -f, -s \\ \hline
 \texttt{sort} & & \\ \hline
-\texttt{uniq} & & \\ \hline
+\texttt{uniq} & & -c \\ \hline
 \end{tabular}
 \end{center}
 \end{steps}
 
-\begin{bonus}
-Sometimes the side effects of a command can also be useful. 
-We can use \texttt{touch} to create an empty file using the command string \texttt{touch filename}.
-Look at the \texttt{man} page for the command \texttt{touch} \& see if you can find this functionality described in the help page. \\
-\end{bonus}
+%\begin{bonus}
+%Sometimes the side effects of a command can also be useful. 
+%We can use \texttt{touch} to create an empty file using the command string \texttt{touch filename}.
+%Look at the \texttt{man} page for the command \texttt{touch} \& see if you can find this functionality described in the help page. \\
+%\end{bonus}
 
 \subsection{Tab auto-complete}
 \begin{steps}
 A very helpful \& time-saving tool in the command line is the ability to automatically complete a command, file or directory name using the \texttt{\textless tab \textgreater} key.
 Try typing 
 \begin{lstlisting}
-ls /home/tr <tab>
+ls /home/h <tab>
 \end{lstlisting}
 where \texttt{\textless tab \textgreater} represents the tab key.
 \end{steps}
 \begin{information}
-Notice how the word \texttt{trainee} is completed automatically!
+Notice how the word \texttt{hub} is completed automatically!
 This functionality will automatically fill as far as it can until conflicting options are reached.
 In this case, there was only one option so it was able to complete all the way to the end of the file path. 
 This enables us to quickly enter long file paths without the risk of typos. 
@@ -444,7 +468,7 @@ The most common error we'll see today will be mistakes in file paths caused by p
 \begin{steps}
 Now enter
 \begin{lstlisting}
-ls ~/D <tab>
+ls ~/Do <tab>
 \end{lstlisting}
 and it will look like the auto-complete is not working.
 This is because there are two possibilities \& it doesn't know which you want.
@@ -459,10 +483,12 @@ If we'd hit the \texttt{\textless tab \textgreater} key after typing \texttt{hea
 \end{advanced}
 
 \section{Putting It All Together}
-Now we can use some the above commands to perform something useful. \\
+Now we can use some the above commands to perform something useful. 
+
+\subsection{Creating and Viewing a File}
 
 \begin{steps}
-First, let's create a personal directory under \texttt{/home/trainee} with your first name as the directory name.
+First, let's create a personal directory under \texttt{/home/hub} with your first name as the directory name.
 \textbf{Where you see \textit{firstname} below, use your actual firstname.}\\
 \begin{lstlisting}
 cd ~
@@ -475,6 +501,7 @@ cd firstname
 \end{lstlisting}
 
 Create an empty text file.
+Check the \texttt{man} page for \texttt{touch} if you're not sure about this line.
 \begin{lstlisting}
 touch hello.txt
 \end{lstlisting}
@@ -486,6 +513,8 @@ cat hello.txt
 
 Obviously nothing was printed to your terminal in the previous line because the file is empty.
 Let's write something to the file, then try reading it again.
+In the following line, the symbol \texttt{>>} places the text \textbf{at the end} of whatever is already in the file.
+As the file is empty, this will just write a single line.
 \begin{lstlisting}
 echo "Hello" >> hello.txt
 cat hello.txt
@@ -524,43 +553,45 @@ For most of the above commands we could have used the auto-complete feature of t
 Did you remember this trick?
 \end{note}
 
+\subsection{Copying and Renaming a File}
+
+Later today, we're going to look through a file containing a list of words.
+It's currently on your VM in the folder \texttt{/usr/share/dict} and has the name \texttt{cracklib-small}.
+Let's copy this to your \texttt{firstname} folder, in your home directory.
+
 \begin{steps}
-In the \texttt{\~{}/Documents/trainingData} directory, you will find the file \texttt{pair1.fq}
-We can copy this to our newly created directory using the command \\
+
 \begin{lstlisting}
-cp ~/Documents/trainingData/pair1.fq ~/firstname/pair1.fq
+cp /usr/share/dict/cracklib-small ~/firstname
 \end{lstlisting}
 
-Next we will rename the file \\
+Next we will rename the file.
+Note, that in bash there is no ``rename" tool.
+Instead we ``move" from it's current location to any location we choose, with whatever name we choose.
+In the following, the location is the same so we are effectively just giving the file a new name.\\
 \begin{lstlisting}
-mv ~/firstname/pair1.fq ~/firstname/myReads1.fq
+mv ~/firstname/cracklib-small ~/firstname/words
 \end{lstlisting}
 
 We can look at the first 5 lines of the file using \\
 \begin{lstlisting}
-head -n5 ~/firstname/myReads1.fq
+head -n5 ~/firstname/words
 \end{lstlisting}
 
 Or we can look at the last 10 lines of the file using \\
 \begin{lstlisting}
-tail -n10 ~/firstname/myReads1.fq
+tail -n10 ~/firstname/words
 \end{lstlisting}
 
 We could even page through the file using \texttt{less}.
 (Remember to hit \texttt{q} to exit the pager.)\\
 \begin{lstlisting}
-less ~/firstname/myReads1.fq
+less ~/firstname/words
 \end{lstlisting}
 
 We can even find how many lines there are in the file by using \\
 \begin{lstlisting}
-wc -l ~/firstname/myReads1.fq
-\end{lstlisting}
-
-We don't need the file anymore, so now we can delete it.
-What a waste!!!
-\begin{lstlisting}
-rm ~/firstname/myReads1.fq
+wc -l ~/firstname/words
 \end{lstlisting}
 
 \end{steps}
@@ -568,6 +599,18 @@ rm ~/firstname/myReads1.fq
 \begin{questions}
 Did we need to enter the full file path in the above commands, or could we have saved ourselves some effort by changing into the \texttt{\~{}/firstname} directory? \\
 \begin{answer}
-Yes, we could have changed into the \texttt{\~{}/firstname} directory \& just entered the file name. \\
+Yes, we could have changed into the \texttt{\~{}/firstname} directory \& just entered the file name. 
 \end{answer}
 \end{questions}
+
+\clearpage
+\section{Summary}
+
+Now we have experience in several key tasks which are some of the most common tasks needed for any bioinformatics analysis, or for any general HPC usage.
+
+\begin{enumerate}
+	\item How to access a manual\\
+	\item How to create and navigate through directories\\
+	\item How to create and view files\\
+	\item How to copy, move and rename files
+\end{enumerate}
