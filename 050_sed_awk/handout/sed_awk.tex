@@ -71,6 +71,9 @@ If you want to match `ATGNNNTGA', where N is any base, and just output these thr
 echo 'ATGCCAGTA' | sed -r 's/ATG(.{3})GTA/\1/g'
 \end{lstlisting}
 
+Clearly, we have just given this command a sequence so we know exactly what to expect.
+However, hopefully this demonstrates the concept of extracting a subset of the sequence.
+
 Or if we needed to replace those three bases with an expanded repeat of them, you could do the following where we capture the undefined string between \texttt{ATG} \& \texttt{GTA}, and expand it: \\
 \begin{lstlisting}
 echo 'ATGCCAGTA' | sed -r 's/ATG(.{3})GTA/ATG\1\1\1GTA/g'
@@ -99,38 +102,20 @@ By default \texttt{sed} will print the entire input stream it receives, but sett
 Try this by adding an `n' immediately after the `-r' in one of the above lines \& you will notice you receive no output.
 This is useful if we wish to restrict our output to a subset of lines within a file, and by including a `p' at the end of the script section, only the section matching the results of the script will be printed.
 \begin{steps}
-Make sure you are in the correct directory \& we can look through the file \textit{pair1.fq} again.
+Make sure you are in the correct directory \& we can look through the \texttt{GFF} file again.
 \begin{lstlisting}
-sed -n '1,10p' pair1.fq
+sed -n '1,10p' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
 This will print the first 10 lines, like the \texttt{head} command will by default.
 However, we could now print any range of lines we choose.
-Try this by changing the script to something interesting like `101,112p'.
+Try this by changing the script to something interesting like `101,112p'.\\
+\\
 We could also restrict the range to specific lines by using the \texttt{sed} increment operator `\~{}'.
 \begin{lstlisting}
-sed -n '1~4p' pair1.fq
+sed -n '1~10p' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
-This will print every 4th line, beginning at the first, effectively giving just the sequence identifiers from this set of reads.
-We could use this just to extract the sequences themselves, or the quality scores.
+This will print every 10th line, beginning at the first.
 \end{steps}
-
-\begin{questions}
-The previous command prints every 4th line, but isn't restricted to any range within the file.
-How could we restrict the output to just the first 10 identifiers? \\
-\begin{answer}
-We could pipe the output to another \texttt{sed} command or  to head.\\
-\texttt{sed -n `1\~{}4p' pair1.fq | sed -n `1,10 p'} \\
-\texttt{sed -n `1\~{}4p' pair1.fq | head -n10} \\
-\end{answer}
-
-This also gives us a simple way of counting the reads in the file.
-Try to think of a way of doing this using the pipe symbol.\\
-\begin{answer}
-\texttt{sed -n '1\~{}4p' pair1.fq | wc -l} \\
-or \\
-\texttt{sed -n '1\~{}4p' pair1.fq | egrep -c '\^{}@'}
-\end{answer}
-\end{questions}
 
 \begin{steps}
 We can also make sed operate like \texttt{grep} by making it only print the lines which match a pattern.
@@ -140,7 +125,19 @@ sed -rn '/TGCAGGCTCT.+(GA){2}.+/ p' pair1.fq
 Note however, that the line numbers are not present in this output.
 \end{steps}
 
-\section{Some Important Concepts}
+\begin{questions}
+How would we use \texttt{sed} to extract the lines from the genome sequence which match the pattern \texttt{ATGC.+ACAA.*}? What text does this pattern represent?\\
+\begin{answer}
+\texttt{ sed -rn '/ATGC.+ACAA.*/p' GCF\_000011985.1\_ASM1198v1\_genomic.fna}\\
+\end{answer}
+How would we use the pipe to extract the unspecified sequence between the ATGC and the ACAA?\\
+\begin{answer}
+\texttt{sed -rn '/ATGC.+ACAA.*/p' GCF\_000011985.1\_ASM1198v1\_genomic.fna | sed -r 's/ATGC(.+)ACAA.*/\textbackslash 1/g'
+}
+\end{answer}
+\end{questions}
+
+\section{Some Important Programming Concepts}
 
 Before moving on to awk, we need to quickly recap two of the most widely used techniques in programming:
 \begin{enumerate}
@@ -161,9 +158,10 @@ for i in 1 2 3; do (echo -e $i); done
 \begin{information}
 In the above code, the fragment before the semi-colon asked the program to cycle through the values 1, 2 \& 3, letting the variable `i' take each value in order of appearance.
 First i = 1, then i = 2 \& finally i = 3.
-If you're wondering why we chose `i', it just seemed like a sensible choice for an integer. \\
+If you're wondering why we chose `i', it just seemed like a sensible choice for an integer. 
+We simply needed to choose a name for a \textit{variable} which we would pass the values to.\\
 
-After that was the instruction on what to do for each value.
+After assigning each value to \texttt{i}, was the instruction on what to do for each value.
 Note that the value of the variable `i' was \textit{prefaced by the dollar sign (\$).
 This is how the bash shell knows it is a variable, not the letter `i'.}
 The command \texttt{done} then finished the \texttt{do} command.
@@ -179,8 +177,8 @@ Variables in shell scripts can hold numbers or text strings and don't have to be
 An alternate approach could be to make a breathtaking claim about some files.
 Here we'll use the variable called `f', which seems sensible for a filename.
 \begin{lstlisting}
-cd ~/Documents/trainingData
-for f in $(ls); do (echo -e "The file $f exists"); done
+cd ~/firstname
+for f in $(ls); do (echo -e "I can see the file $f"); done
 \end{lstlisting}
 \end{advanced}
 
@@ -189,7 +187,7 @@ The use of double quotes for the \texttt{echo} command also allows us to refer t
 Single quotes at this point would only return the characters `\$f'.
 
 \subsubsection{If Statements}
-If statements are those which only have a binary `yes' or `no' response.
+If statements are those which only have a binary `yes' or `no' response, or more correctly a \texttt{TRUE}/\texttt{FALSE} response.
 For example, we could specify things like:
 \begin{itemize}
 \item \texttt{if} (i$>1$) then \texttt{do} something, or
@@ -231,7 +229,9 @@ awk '{if  ($3=="rRNA")  print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
 Here we've specified that the third field must be an rRNA, so this will give us all of the ribosomal RNAs annotated in the file. \\
 
-We could make it a little more complex and just look for genes in a given region
+We could make it a little more complex and just look for genes in a given region.
+\textbf{In the following line, the symbol `\' has been placed here to indicate it is a single line, extending beyond the width of the page.
+Do not enter this character!}
 \begin{lstlisting}
 awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
 \end{lstlisting}
@@ -239,7 +239,7 @@ awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' GCF_0000119
 \begin{note}
 In the above code, \texttt{\$3==``gene''} asks for the entry in the third field to be ``gene.''
 The next two fragments request for the values in the fourth field (i.e. \$4) to be between 10000 \& 20000.
-Thus we have found all the features annotate as genes in a 10,000bp region of this genome.
+Thus we have found all the features annotated as genes in a 10,000bp region of this genome.
 Notice that each these three commands were enclosed in a pair of brackets within an outer pair of brackets.
 This gave a command of the form: \\
 \texttt{( (Condition1) \&\& (Condition2) \&\& (Condition3) )} \\
