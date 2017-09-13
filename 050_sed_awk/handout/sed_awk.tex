@@ -230,7 +230,7 @@ awk '{if  ($3=="rRNA")  print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
 Here we've specified that the third field must be an rRNA, so this will give us all of the ribosomal RNAs annotated in the file. \\
 
 We could make it a little more complex and just look for genes in a given region.
-\textbf{In the following line, the symbol `\' has been placed here to indicate it is a single line, extending beyond the width of the page.
+\textbf{In the following line, the symbol `\textbackslash ' has been placed here to indicate it is a single line, extending beyond the width of the page.
 Do not enter this character!}
 \begin{lstlisting}
 awk '{if ( ($3=="gene") && ($4 > 10000) && ($4 < 20000) ) print $0}' GCF_000011985.1_ASM1198v1_genomic.gff
